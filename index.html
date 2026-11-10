@@ -187,18 +187,6 @@ footer { font-size: 12px; padding: 13px 0 20px; border-top: 1px solid var(--line
   },
   {
     "type": "phrase",
-    "front": "I’ll show you ___.（我马上演示给你看。）",
-    "back": "in a moment · 一会儿，马上",
-    "note": "I’ll show you in a moment."
-  },
-  {
-    "type": "phrase",
-    "front": "I’m going to ___.（我这就把一套幻灯片放进来。）",
-    "back": "drop a deck in here · 把一套幻灯片放进来",
-    "note": "I’m going to drop a deck in here. deck 在这里指整套幻灯片。"
-  },
-  {
-    "type": "phrase",
     "front": "This is a ___ with no interactive elements.（这是一张没有交互元素的静态幻灯片。）",
     "back": "static slide · 静态幻灯片",
     "note": "This is a static slide with no interactive elements."
@@ -499,12 +487,12 @@ el("backup").addEventListener("click", () => {
 function load() {
   try {
     const stored = localStorage.getItem(storageKey);
-    const removedCard = key({
-      type: "phrase",
-      front: "I’ll ___ the design team ___ the next steps.（我会和设计团队沟通下一步。）",
-      back: "connect with … on … · 就某事和某人沟通"
-    });
-    deck = stored ? parse(stored).filter(card => key(card) !== removedCard) : [];
+    const removedCards = new Set([
+      key({"type":"phrase","front":"I’ll ___ the design team ___ the next steps.（我会和设计团队沟通下一步。）","back":"connect with … on … · 就某事和某人沟通"}),
+      key({"type":"phrase","front":"I’ll show you ___.（我马上演示给你看。）","back":"in a moment · 一会儿，马上"}),
+      key({"type":"phrase","front":"I’m going to ___.（我这就把一套幻灯片放进来。）","back":"drop a deck in here · 把一套幻灯片放进来"})
+    ]);
+    deck = stored ? parse(stored).filter(card => !removedCards.has(key(card))) : [];
     loadFailed = false;
   } catch {
     loadFailed = true;
