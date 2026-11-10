@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f4ee">
+<title>遇词 · 每日英语复习</title>
+<style>
+:root {
+  color-scheme: light;
+  --ink: #20352d;
+  --muted: #56665c;
+  --paper: #fffef8;
+  --canvas: #f6f4ee;
+  --line: #deded3;
+  --green: #214c3b;
+  --mint: #e6efdf;
+  --gold: #f2e7bf;
+  font-family: system-ui, -apple-system, "PingFang SC", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); color: var(--ink); }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #94722c; outline-offset: 3px; }
+button:disabled { opacity: .55; cursor: default; }
+[hidden] { display: none !important; }
+.shell { width: min(100% - 36px, 620px); margin: auto; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 23px 0 19px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; }
+.mark { display: grid; place-items: center; border-radius: 10px; width: 35px; height: 35px; color: var(--paper); background: var(--green); font: italic 23px Georgia, serif; }
+nav { display: flex; gap: 3px; }
+nav button, .quiet { background: transparent; border: 0; border-radius: 9px; color: var(--muted); padding: 10px 11px; min-height: 44px; }
+nav button[aria-current="page"] { background: var(--mint); color: var(--green); font-weight: 700; }
+main { padding: 35px 0 32px; }
+.eyebrow { color: var(--green); font-size: 12px; font-weight: 750; letter-spacing: .12em; }
+h1 { font-size: clamp(30px, 8vw, 43px); line-height: 1.18; margin: 8px 0; letter-spacing: -.045em; }
+h2 { margin: 0; font-size: 21px; }
+p { line-height: 1.65; margin: 8px 0; }
+.muted, footer { color: var(--muted); }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 24px 0 15px; }
+.metric { border: 1px solid var(--line); border-radius: 15px; background: var(--paper); padding: 12px; }
+.metric:first-child { background: var(--mint); border-color: #d5e2cf; }
+.metric strong { display: block; font: 700 28px Georgia, serif; }
+.metric span { font-size: 13px; color: var(--muted); }
+.panel { margin-top: 16px; padding: clamp(18px, 5vw, 29px); background: var(--paper); border: 1px solid var(--line); border-radius: 21px; box-shadow: 0 5px 0 #eae8df; }
+.empty { background: var(--green); color: var(--paper); border-color: var(--green); }
+.empty p { color: #dce8db; }
+.empty .primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.empty .secondary { color: white; border-color: #91aa97; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.primary, .secondary, .grade { min-height: 46px; padding: 10px 14px; border: 1px solid var(--green); border-radius: 11px; font-weight: 650; }
+.primary { background: var(--green); color: white; }
+.secondary, .grade { background: transparent; color: var(--green); }
+.full { width: 100%; margin-top: 17px; }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 13px; }
+.badge { display: inline-block; background: var(--mint); color: var(--green); border-radius: 20px; padding: 4px 9px; font-size: 12px; white-space: nowrap; }
+.prompt { font-size: clamp(25px, 6vw, 39px); line-height: 1.2; margin: 20px 0 13px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.answer { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 13px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 15px; }
+.grade { padding: 8px 3px; background: var(--mint); border-color: transparent; }
+.grade:first-child { background: #f3e6df; }
+.grade:nth-child(2) { background: #f5ecd2; }
+.grade small { display: block; margin-top: 4px; font-weight: 400; }
+label { display: block; margin: 12px 0 6px; font-weight: 650; }
+input[type="search"], textarea { width: 100%; border: 1px solid var(--line); color: var(--ink); background: var(--paper); border-radius: 11px; padding: 12px; }
+textarea { min-height: 122px; resize: vertical; }
+.library { list-style: none; margin: 12px 0 0; padding: 0; }
+.library li { border-bottom: 1px solid var(--line); padding: 13px 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.library li:last-child { border-bottom: 0; }
+.library .badge { margin-right: 7px; }
+.library p { font-size: 14px; }
+footer { font-size: 12px; padding: 13px 0 20px; border-top: 1px solid var(--line); }
+#notice { margin: 12px 0 0; color: var(--green); font-weight: 650; }
+#notice.error { color: #922b1d; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand"><span class="mark" aria-hidden="true">a</span>遇词</div>
+    <nav aria-label="主导航">
+      <button data-view="review" aria-current="page">复习</button>
+      <button data-view="library">词库</button>
+      <button data-view="import">导入</button>
+    </nav>
+  </header>
+  <main>
+    <section id="review">
+      <div id="date" class="eyebrow"></div>
+      <h1>今日复习</h1>
+      <p class="muted">先回想，再翻面。</p>
+      <div class="metrics">
+        <div class="metric"><strong id="due-count">0</strong><span>待复习</span></div>
+        <div class="metric"><strong id="done-count">0</strong><span>今日已练</span></div>
+        <div class="metric"><strong id="total-count">0</strong><span>词库卡片</span></div>
+      </div>
+      <div id="rest" class="panel empty" hidden>
+        <h2 id="rest-title"></h2>
+        <p id="rest-description"></p>
+        <div id="start-actions" class="row">
+          <button id="open-import" class="primary">导入我的卡片</button>
+          <button id="demo" class="secondary">试背 3 张示例</button>
+        </div>
+      </div>
+      <article id="card" class="panel" hidden>
+        <div class="card-top"><span id="kind" class="badge"></span><span id="cue"></span></div>
+        <h2 id="prompt" class="prompt" tabindex="-1"></h2>
+        <button class="primary full" id="reveal" aria-controls="solution" aria-expanded="false">翻开答案</button>
+        <div id="solution" hidden>
+          <div class="answer" id="answer" tabindex="-1"></div>
+          <div class="grades" aria-label="选择记忆程度">
+            <button class="grade" data-grade="again">忘了<small></small></button>
+            <button class="grade" data-grade="hard">有点熟<small></small></button>
+            <button class="grade" data-grade="good">记住了<small></small></button>
+          </div>
+        </div>
+      </article>
+    </section>
+    <section id="library" hidden>
+      <div class="eyebrow">我的卡片</div>
+      <h1>词库</h1>
+      <label for="search">搜索卡片</label>
+      <input id="search" type="search" placeholder="搜单词、句型或释义">
+      <ul class="panel library" id="items"></ul>
+    </section>
+    <section id="import" hidden>
+      <div class="eyebrow">收录与备份</div>
+      <h1>导入卡片</h1>
+      <p class="muted">把聊天里整理好的 JSON 批次粘贴进来，或选择下载好的文件。重复的卡片会合并，已有的复习进度会保留。</p>
+      <div class="panel">
+        <label for="payload">粘贴卡片 JSON</label>
+        <textarea id="payload" spellcheck="false" placeholder='[{"type":"phrase","front":"make it","back":"能到场"}]'></textarea>
+        <div class="row">
+          <button class="primary" id="paste-import">导入内容</button>
+          <button class="secondary" id="pick-file">选择 JSON 文件</button>
+          <input id="file" type="file" accept=".json,application/json" hidden>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>备份与迁移</h2>
+        <p class="muted">导出词库和复习进度。换手机或换浏览器时，用上面的文件入口导入备份。</p>
+        <button class="secondary" id="backup">下载备份</button>
+      </div>
+    </section>
+    <p id="notice" role="status"></p>
+  </main>
+  <footer>词库和复习进度保存在当前浏览器。</footer>
+</div>
+<script id="starter-deck" type="application/json">
+[
+  {
+    "type": "phrase",
+    "front": "I’ll send you an update ___.（我一会儿给你发个进展更新。）",
+    "back": "here shortly · 一会儿，很快",
+    "note": "I’ll send you an update here shortly."
+  },
+  {
+    "type": "phrase",
+    "front": "I’ll ___ the design team ___ the next steps.（我会和设计团队沟通下一步。）",
+    "back": "connect with … on … · 就某事和某人沟通",
+    "note": "I’ll connect with the design team on the next steps."
+  },
+  {
+    "type": "word",
+    "front": "assign",
+    "back": "分配，指定，设定",
+    "note": "You can assign a different state to each step. 你可以为每个步骤指定不同的状态。"
+  },
+  {
+    "type": "phrase",
+    "front": "You can ___ the animation one step at a time.（你可以一步步播放动画。）",
+    "back": "progress through · 按步骤推进",
+    "note": "You can progress through the animation one step at a time."
+  },
+  {
+    "type": "phrase",
+    "front": "Feel free to ___ and explore the prototype.（可以到处点点，看看原型。）",
+    "back": "click around · 到处点点，随手点点看",
+    "note": "Feel free to click around and explore the prototype."
+  },
+  {
+    "type": "phrase",
+    "front": "Use the arrow keys to ___ the steps.（用方向键在各步骤之间切换。）",
+    "back": "navigate through · 在……中浏览或切换",
+    "note": "Use the arrow keys to navigate through the steps."
+  },
+  {
+    "type": "word",
+    "front": "demonstrate",
+    "back": "演示，示范",
+    "note": "I’ll demonstrate how it works. 我来演示一下它怎么用。"
+  },
+  {
+    "type": "phrase",
+    "front": "I’ll show you ___.（我马上演示给你看。）",
+    "back": "in a moment · 一会儿，马上",
+    "note": "I’ll show you in a moment."
+  },
+  {
+    "type": "phrase",
+    "front": "I’m going to ___.（我这就把一套幻灯片放进来。）",
+    "back": "drop a deck in here · 把一套幻灯片放进来",
+    "note": "I’m going to drop a deck in here. deck 在这里指整套幻灯片。"
+  },
+  {
+    "type": "phrase",
+    "front": "This is a ___ with no interactive elements.（这是一张没有交互元素的静态幻灯片。）",
+    "back": "static slide · 静态幻灯片",
+    "note": "This is a static slide with no interactive elements."
+  },
+  {
+    "type": "pattern",
+    "front": "到了第 6 页，你就可以试试那个交互。（Once …）",
+    "back": "Once you get to slide 6, you can try the interaction.",
+    "note": "once you get to … · 一到……，等你到了……"
+  },
+  {
+    "type": "word",
+    "front": "momentarily",
+    "back": "短暂地，也可表示「马上」",
+    "note": "The button appears momentarily. 按钮会短暂出现。"
+  },
+  {
+    "type": "phrase",
+    "front": "The button will ___ after a few seconds.（几秒后按钮就会淡出。）",
+    "back": "fade away · 逐渐消失，淡出",
+    "note": "The button will fade away after a few seconds."
+  },
+  {
+    "type": "phrase",
+    "front": "___ slide 6 to try it.（切到第 6 页试一下。）",
+    "back": "navigate to · 前往，切换到",
+    "note": "Navigate to slide 6 to try it."
+  },
+  {
+    "type": "word",
+    "front": "obstruct",
+    "back": "遮挡，阻挡",
+    "note": "The button could obstruct content on the slide. 这个按钮可能会挡住幻灯片上的内容。"
+  },
+  {
+    "type": "phrase",
+    "front": "The button could ___ if you try to click something behind it.（如果你想点后面的东西，这个按钮可能会挡着。）",
+    "back": "get in the way · 碍事，妨碍",
+    "note": "The button could get in the way if you try to click something behind it. 也可接 of + 名词或动名词。"
+  }
+]
+</script>
+<script>
+"use strict";
+const storageKey = "yuci.deck.v1";
+const types = { word: "单词", phrase: "短语", pattern: "句型" };
+const cues = { word: "想想它是什么意思", phrase: "试着回想短语或它的意思", pattern: "试着用英语说出来" };
+const intervals = [1, 3, 7, 14, 30, 60, 120];
+const grades = ["again", "hard", "good"];
+const samples = [
+  { type: "phrase", front: "I can’t ___ tonight.（我今晚到不了。）", back: "make it · 能到场", note: "I can’t make it tonight. 我今晚来不了。" },
+  { type: "word", front: "reluctant", back: "adj. 不情愿的", note: "She was reluctant to ask for help. 她不太愿意开口求助。" },
+  { type: "pattern", front: "我本来想给你打电话。（I meant …）", back: "I meant to call you.", note: "I meant to + 动词原形 · 我本来打算……" }
+];
+const el = id => document.getElementById(id);
+let activeView = "review";
+let shown = null;
+let revealed = false;
+let deck = [];
+let loadFailed = false;
+
+function key(card) {
+  return JSON.stringify([card.type, card.front, card.back].map(part =>
+    part.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim()));
+}
+
+function normalize(item, restoreProgress) {
+  if (!item || !Object.hasOwn(types, item.type) ||
+      typeof item.front !== "string" || !item.front.trim() ||
+      typeof item.back !== "string" || !item.back.trim() ||
+      (item.note !== undefined && typeof item.note !== "string")) {
+    throw new Error("每张卡片都需要有效的 type、front 和 back。type 可填 word、phrase 或 pattern。");
+  }
+  const card = { type: item.type, front: item.front.trim(), back: item.back.trim(), note: (item.note || "").trim() };
+  if (!restoreProgress) return { ...card, due: 0, level: 0, reviewedAt: null };
+  const { due, level, reviewedAt } = item;
+  if (!validTime(due) || !Number.isInteger(level) || level < 0 || level > intervals.length ||
+      (reviewedAt !== null && !validTime(reviewedAt))) {
+    throw new Error("备份中的复习进度格式不正确。");
+  }
+  return { ...card, due, level, reviewedAt };
+}
+
+function validTime(value) {
+  return Number.isSafeInteger(value) && value >= 0 && value <= 8640000000000000;
+}
+
+function parse(text) {
+  let data;
+  try { data = JSON.parse(text); }
+  catch { throw new Error("这段内容不是有效的 JSON。请复制完整的卡片批次。"); }
+  if (Array.isArray(data)) return data.map(item => normalize(item, false));
+  if (data?.version === 1 && Array.isArray(data.cards)) return data.cards.map(item => normalize(item, true));
+  throw new Error("请选择卡片列表，或遇词导出的备份文件。");
+}
+
+function save(cards) {
+  if (loadFailed) throw new Error("当前词库读取失败，无法保存。请保留此浏览器的数据。");
+  try { localStorage.setItem(storageKey, JSON.stringify({ version: 1, cards })); }
+  catch { throw new Error("浏览器无法保存词库。请确认可用存储空间和浏览器设置。"); }
+  deck = cards;
+}
+
+function add(cards) {
+  if (!cards.length) throw new Error("这个批次里没有卡片。");
+  const merged = new Map(deck.map(card => [key(card), card]));
+  for (const card of cards) {
+    const id = key(card);
+    const existing = merged.get(id);
+    if (!existing) {
+      merged.set(id, card);
+      continue;
+    }
+    const latest = (card.reviewedAt ?? -1) > (existing.reviewedAt ?? -1) ? card : existing;
+    merged.set(id, { ...latest, note: card.note || existing.note });
+  }
+  const added = merged.size - deck.length;
+  save([...merged.values()]);
+  render();
+  return added;
+}
+
+function daysFrom(now, days) {
+  const date = new Date(now);
+  date.setDate(date.getDate() + days);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+}
+
+function gradeSchedule(card, grade, now) {
+  if (grade === "again") return { due: now + 10 * 60 * 1000, level: 0, label: "10 分钟后" };
+  if (grade === "hard") {
+    const level = Math.max(0, card.level - 1);
+    const days = Math.max(1, Math.floor(intervals[level] / 2));
+    return { due: daysFrom(now, days), level, label: days === 1 ? "明天" : days + " 天后" };
+  }
+  const days = intervals[Math.min(card.level, intervals.length - 1)];
+  return { due: daysFrom(now, days), level: Math.min(card.level + 1, intervals.length), label: days === 1 ? "明天" : days + " 天后" };
+}
+
+function dateLabel(time) {
+  return new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" }).format(time);
+}
+
+function notice(message = "", error = false) {
+  el("notice").textContent = message;
+  el("notice").classList.toggle("error", error);
+}
+
+function renderReview() {
+  const now = Date.now();
+  const today = daysFrom(now, 0);
+  const due = deck.filter(card => card.due <= now).sort((a, b) => a.due - b.due);
+  el("date").textContent = dateLabel(now);
+  el("due-count").textContent = due.length;
+  el("done-count").textContent = deck.filter(card => card.reviewedAt !== null && card.reviewedAt >= today && card.reviewedAt <= now).length;
+  el("total-count").textContent = deck.length;
+  const next = due.find(card => key(card) === shown) || due[0];
+  const nextKey = next ? key(next) : null;
+  if (shown !== nextKey) revealed = false;
+  shown = nextKey;
+  el("card").hidden = !next;
+  el("rest").hidden = Boolean(next);
+  if (!next) {
+    el("start-actions").hidden = deck.length > 0;
+    el("rest-title").textContent = deck.length ? "这一轮复习完了" : "从你遇到的第一句话开始";
+    if (!deck.length) {
+      el("rest-description").textContent = "导入聊天里整理好的卡片，或先拿三张示例练手。";
+      return;
+    }
+    const nextDue = deck.reduce((earliest, card) => Math.min(earliest, card.due), Infinity);
+    const nextLabel = nextDue < daysFrom(now, 1)
+      ? new Intl.DateTimeFormat("zh-CN", { hour: "numeric", minute: "2-digit" }).format(nextDue)
+      : dateLabel(nextDue);
+    el("rest-description").textContent = "下次复习 " + nextLabel;
+    return;
+  }
+  el("kind").textContent = types[next.type];
+  el("cue").textContent = cues[next.type];
+  el("prompt").textContent = next.front;
+  el("answer").textContent = next.note ? next.back + "\n\n" + next.note : next.back;
+  el("reveal").hidden = revealed;
+  el("reveal").setAttribute("aria-expanded", String(revealed));
+  el("solution").hidden = !revealed;
+  for (const button of document.querySelectorAll("[data-grade]")) {
+    button.querySelector("small").textContent = gradeSchedule(next, button.dataset.grade, now).label;
+  }
+}
+
+function renderLibrary() {
+  const term = el("search").value.trim().toLowerCase();
+  const matches = deck.filter(card => [card.front, card.back, card.note, types[card.type]].some(text => text.toLowerCase().includes(term)));
+  el("items").replaceChildren();
+  if (!matches.length) {
+    const item = document.createElement("li");
+    item.textContent = deck.length ? "没有匹配的卡片。" : "词库还是空的。";
+    el("items").append(item);
+  }
+  for (const card of matches) {
+    const item = document.createElement("li");
+    const badge = document.createElement("span");
+    const front = document.createElement("strong");
+    const back = document.createElement("p");
+    badge.className = "badge";
+    badge.textContent = types[card.type];
+    front.textContent = card.front;
+    back.textContent = card.note ? card.back + "\n" + card.note : card.back;
+    item.append(badge, front, back);
+    el("items").append(item);
+  }
+}
+
+function render() {
+  if (activeView === "review") renderReview();
+  if (activeView === "library") renderLibrary();
+}
+
+function openView(view) {
+  activeView = view;
+  for (const id of ["review", "library", "import"]) el(id).hidden = id !== view;
+  for (const button of document.querySelectorAll("[data-view]")) {
+    if (button.dataset.view === view) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  }
+  if (!loadFailed) notice();
+  render();
+}
+
+function importText(text) {
+  const cards = parse(text);
+  const added = add(cards);
+  notice("已导入 " + added + " 张新卡片，合并 " + (cards.length - added) + " 张重复卡片。");
+}
+
+function run(action) {
+  return async (...args) => {
+    try { await action(...args); }
+    catch (error) { notice(error.message || "操作失败，请再试一次。", true); }
+  };
+}
+
+for (const button of document.querySelectorAll("[data-view]")) {
+  button.addEventListener("click", () => openView(button.dataset.view));
+}
+el("open-import").addEventListener("click", () => {
+  openView("import");
+  el("payload").focus();
+});
+el("demo").addEventListener("click", run(() => {
+  add(samples.map(card => normalize(card, false)));
+  el("prompt").focus();
+}));
+el("reveal").addEventListener("click", () => {
+  revealed = true;
+  renderReview();
+  el("answer").focus();
+});
+for (const button of document.querySelectorAll("[data-grade]")) {
+  button.addEventListener("click", run(() => {
+    const card = deck.find(item => key(item) === shown);
+    const grade = button.dataset.grade;
+    if (!card || !revealed || !grades.includes(grade)) return;
+    const now = Date.now();
+    const { due, level } = gradeSchedule(card, grade, now);
+    save(deck.map(item => item === card ? { ...item, due, level, reviewedAt: now } : item));
+    notice();
+    renderReview();
+    if (shown) el("prompt").focus();
+    else {
+      el("rest-title").tabIndex = -1;
+      el("rest-title").focus();
+    }
+  }));
+}
+el("search").addEventListener("input", renderLibrary);
+el("paste-import").addEventListener("click", run(() => {
+  importText(el("payload").value);
+  el("payload").value = "";
+}));
+el("pick-file").addEventListener("click", () => el("file").click());
+el("file").addEventListener("change", run(async event => {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (file) importText(await file.text());
+}));
+el("backup").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify({ version: 1, cards: deck }, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "yuci-backup.json";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+});
+
+function load() {
+  try {
+    const stored = localStorage.getItem(storageKey);
+    deck = stored ? parse(stored) : [];
+    loadFailed = false;
+  } catch {
+    loadFailed = true;
+    notice("无法读取本地词库。请确认浏览器允许本地存储。", true);
+  }
+  el("backup").disabled = loadFailed;
+  render();
+}
+window.addEventListener("storage", event => {
+  if (event.key === storageKey || event.key === null) load();
+});
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) render();
+});
+setInterval(() => {
+  if (!document.hidden && activeView === "review") renderReview();
+}, 15000);
+function importLink() {
+  const prefix = "#import=";
+  if (!location.hash.startsWith(prefix)) return;
+  try {
+    const batch = decodeURIComponent(location.hash.slice(prefix.length));
+    importText(batch);
+    history.replaceState(null, "", location.pathname + location.search);
+  } catch (error) {
+    notice(error.message || "无法导入链接里的卡片。", true);
+  }
+}
+load();
+try {
+  add(parse(document.getElementById("starter-deck").textContent));
+} catch (error) {
+  notice(error.message, true);
+}
+importLink();
+window.addEventListener("hashchange", importLink);
+</script>
+</body>
+</html>
