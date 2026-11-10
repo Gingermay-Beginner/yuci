@@ -156,12 +156,6 @@ footer { font-size: 12px; padding: 13px 0 20px; border-top: 1px solid var(--line
     "note": "I’ll send you an update here shortly."
   },
   {
-    "type": "phrase",
-    "front": "I’ll ___ the design team ___ the next steps.（我会和设计团队沟通下一步。）",
-    "back": "connect with … on … · 就某事和某人沟通",
-    "note": "I’ll connect with the design team on the next steps."
-  },
-  {
     "type": "word",
     "front": "assign",
     "back": "分配，指定，设定",
@@ -505,7 +499,12 @@ el("backup").addEventListener("click", () => {
 function load() {
   try {
     const stored = localStorage.getItem(storageKey);
-    deck = stored ? parse(stored) : [];
+    const removedCard = key({
+      type: "phrase",
+      front: "I’ll ___ the design team ___ the next steps.（我会和设计团队沟通下一步。）",
+      back: "connect with … on … · 就某事和某人沟通"
+    });
+    deck = stored ? parse(stored).filter(card => key(card) !== removedCard) : [];
     loadFailed = false;
   } catch {
     loadFailed = true;
